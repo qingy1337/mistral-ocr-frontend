@@ -15,3 +15,7 @@ python app.py
 ```
 
 The app will be served on `127.0.0.1:1111`
+
+## App
+
+<img width="1335" alt="image" src="https://github.com/user-attachments/assets/a8e05d41-a562-410b-86e3-03d0169157f9" />
