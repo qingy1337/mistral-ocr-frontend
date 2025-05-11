@@ -1,0 +1,368 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-color: #f8f9fa;
+    --surface-color: #ffffff;
+    --text-color: #212529;
+    --border-color: #dee2e6;
+    --font-family: "Roboto", sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+header h1 .beta {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--secondary-color);
+    vertical-align: super;
+    margin-left: 5px;
+    background-color: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+}
+
+.drop-zone {
+    border: 3px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition:
+        border-color 0.3s ease,
+        background-color 0.3s ease;
+    background-color: #fdfdff; /* Slightly off-white */
+    margin-bottom: 2rem;
+}
+
+.drop-zone.drag-over {
+    border-color: var(--primary-color);
+    background-color: #e6f2ff;
+}
+
+.drop-zone-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+}
+
+.drop-zone-prompt svg {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    opacity: 0.7;
+}
+
+.drop-zone-prompt p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0.5rem 0;
+}
+
+.drop-zone-prompt span {
+    font-size: 0.9rem;
+}
+
+.processing-indicator {
+    text-align: center;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.processing-indicator p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+}
+
+.spinner {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid var(--primary-color); /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.result-area {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #fdfdff;
+}
+
+.image-column,
+.text-column {
+    flex: 1;
+    padding: 1rem;
+}
+
+.image-column h2,
+.text-column h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.image-preview-container {
+    width: 100%;
+    max-height: 500px; /* Limit image height */
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; /* Placeholder background */
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 500px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+    display: block;
+}
+
+#textOutput {
+    white-space: pre-wrap; /* Allows wrapping and preserves newlines */
+    word-wrap: break-word;
+    background-color: var(--surface-color);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    min-height: 200px; /* Ensure it has some height even when empty */
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.95rem;
+    color: #333;
+    overflow-y: auto;
+    max-height: 500px; /* Match image preview max height */
+}
+
+#resetButton {
+    display: block;
+    margin: 2rem auto 0;
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--surface-color);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        transform 0.2s ease;
+}
+
+#resetButton:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#resetButton:active {
+    transform: translateY(0);
+}
+
+.text-output-wrapper {
+    position: relative; /* For positioning the copy button */
+}
+
+#textOutput {
+    white-space: pre-wrap; /* Allows wrapping and preserves newlines */
+    word-wrap: break-word;
+    background-color: var(--surface-color);
+    padding: 1rem;
+    padding-right: 45px; /* Make space for the copy button */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    min-height: 200px; /* Ensure it has some height even when empty */
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.95rem;
+    color: #333;
+    overflow-y: auto;
+    max-height: 500px; /* Match image preview max height */
+}
+
+.copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #e9ecef;
+    border: 1px solid var(--border-color);
+    border-radius: 50%; /* Circular */
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        transform 0.1s ease;
+    color: var(--secondary-color);
+}
+
+.copy-button:hover {
+    background-color: #d1d9e0;
+    color: var(--primary-color);
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+.copy-button svg {
+    pointer-events: none; /* Ensures clicks go to the button */
+}
+
+#resetButton {
+    display: block;
+    margin: 2rem auto 0;
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--surface-color);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        transform 0.2s ease;
+}
+
+/* ... (rest of #resetButton styles) ... */
+
+/* Toast Notification Styles */
+.toast {
+    visibility: hidden; /* Hidden by default */
+    min-width: 250px;
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #80f2a1;
+    color: #000000;
+    text-align: center;
+    border-radius: 4px;
+    padding: 16px;
+    position: fixed; /* Fixed position */
+    z-index: 100; /* Sit on top */
+    left: 50%; /* Center horizontally */
+    bottom: 30px; /* 30px from the bottom */
+    font-size: 1rem;
+    opacity: 0;
+    transition:
+        visibility 0s 0.5s,
+        opacity 0.5s linear; /* Smooth fade */
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s linear;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #343a40;
+    color: #f8f9fa;
+    font-size: 0.9rem;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #343a40;
+    color: #f8f9fa;
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Smooth transitions for showing/hiding elements */
+.drop-zone,
+.processing-indicator,
+.result-area,
+#resetButton {
+    transition:
+        opacity 0.5s ease-in-out,
+        transform 0.5s ease-in-out,
+        max-height 0.5s ease-in-out;
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 1000px; /* large enough for content */
+    overflow: hidden;
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    max-height: 0 !important; /* important to override inline style if used */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-width: 0 !important;
+}
