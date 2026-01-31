@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resetButton = document.getElementById("resetButton");
   const copyButton = document.getElementById("copyButton"); // New
   const toastNotification = document.getElementById("toastNotification"); // New
+  const modelSelect = document.getElementById("modelSelect");
   const body = document.body;
 
   let toastTimeout; // To clear existing timeout if any
@@ -58,7 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ image_data_url: imageDataUrl }),
+        body: JSON.stringify({
+          image_data_url: imageDataUrl,
+          model: modelSelect ? modelSelect.value : undefined,
+        }),
       });
 
       if (!response.ok) {

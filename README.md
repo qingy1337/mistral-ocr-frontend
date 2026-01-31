@@ -1,15 +1,15 @@
-# Mistral OCR Frontend
+# Gemini OCR Frontend
 
 Run these commands in your command line to start the app:
 
 ```bash
-git clone https://github.com/qingy1337/mistral-ocr-frontend.git
+git clone https://github.com/qingy1337/gemini-ocr-frontend.git
 
-cd ./mistral-ocr-frontend/
+cd ./gemini-ocr-frontend/
 
-pip install flask python-dotenv
+pip install flask python-dotenv google-genai
 
-[Make sure MISTRAL_API_KEY environment variable is set]
+[Make sure GEMINI_API_KEY or GOOGLE_API_KEY environment variable is set]
 
 python app.py
 ```
