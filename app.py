@@ -4,6 +4,7 @@ from google import genai
 from google.genai import types
 import base64
 import os
+import re
 
 # --- Initialization ---
 load_dotenv()
@@ -21,6 +22,10 @@ ALLOWED_MODELS = {
 }
 OCR_PROMPT = "OCR the image to markdown. Return only the markdown, surrounded by backtick fences."
 
+CODE_FENCE_RE = re.compile(r"^\s*```[^\n]*\n(.*)\n```\s*$", re.DOTALL)
+SINGLE_FENCE_RE = re.compile(r"^\s*```(.*?)```\s*$", re.DOTALL)
+INLINE_FENCE_RE = re.compile(r"^\s*`(.*?)`\s*$", re.DOTALL)
+
 def parse_data_url(image_data_url):
     if not image_data_url.startswith("data:"):
         raise ValueError("Invalid data URL.")
@@ -30,6 +35,20 @@ def parse_data_url(image_data_url):
     mime_type = header[5:].split(";")[0] or "application/octet-stream"
     image_bytes = base64.b64decode(b64_data)
     return mime_type, image_bytes
+
+def strip_backtick_fences(text):
+    if not text:
+        return ""
+    match = CODE_FENCE_RE.match(text)
+    if match:
+        return match.group(1).strip()
+    match = SINGLE_FENCE_RE.match(text)
+    if match:
+        return match.group(1).strip()
+    match = INLINE_FENCE_RE.match(text)
+    if match:
+        return match.group(1).strip()
+    return text.strip()
 
 # --- Routes ---
 @app.route('/')
@@ -57,7 +76,7 @@ def ocr_image():
             ],
         )
 
-        extracted_text = (response.text or "").strip()
+        extracted_text = strip_backtick_fences(response.text or "")
 
         return jsonify({'text': extracted_text})
 
