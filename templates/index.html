@@ -3,36 +3,50 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Gemini OCR Image Extractor</title>
-        <link
-            rel="icon"
-            type="image/svg+xml"
-            href="{{ url_for('static', filename='Google_Gemini_icon_2025.svg') }}"
-        />
+        <title>Image to Text</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml" />
         <link
             rel="stylesheet"
-            href="{{ url_for('static', filename='css/style.css') }}"
+            href="{{ url_for('static', filename='css/style.css', v='results-width') }}"
         />
         <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
     </head>
     <body>
         <div class="container">
             <header>
-                <h1>Image to Text <span class="beta">via Gemini OCR</span></h1>
+                <h1>Image to text</h1>
                 <p>Drag & drop an image or paste it anywhere on the page.</p>
             </header>
 
-            <div class="model-selector">
-                <label for="modelSelect">Model</label>
-                <select id="modelSelect">
-                    <option value="gemini-3-flash-preview" selected>
-                        Gemini 3 Flash (preview)
-                    </option>
-                    <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
-                </select>
+            <section class="connection-settings" aria-label="Model connection settings">
+                <div class="selector-row">
+                    <label for="endpointSelect">Connection</label>
+                    <select id="endpointSelect" aria-label="Connection"></select>
+                    <label for="modelSelect">Model</label>
+                    <select id="modelSelect" aria-label="Model">
+                        <option value="">Select a connection first</option>
+                    </select>
+                    <button id="refreshModelsButton" type="button">Refresh models</button>
+                    <button id="toggleSettingsButton" type="button" aria-expanded="false">Manage connections</button>
+                </div>
+                <p id="settingsStatus" class="settings-status" role="status" aria-live="polite"></p>
+                <div id="settingsPanel" class="settings-panel" hidden>
+                    <p class="settings-note">Connection details are saved only in this browser.</p>
+                    <form id="connectionForm">
+                        <label>Connection name<input id="connectionName" required placeholder="My server" /></label>
+                        <label>OpenAI-compatible API URL<input id="connectionEndpoint" type="url" required placeholder="https://example.com/v1" /></label>
+                        <label>API key<input id="connectionApiKey" type="password" autocomplete="new-password" placeholder="Leave blank if not required" /></label>
+                        <button type="submit">Save connection</button>
+                    </form>
+                    <div class="custom-model-row">
+                        <label for="customModel">Add model to this connection's dropdown</label>
+                        <div><input id="customModel" placeholder="Model ID" /><button id="addModelButton" type="button">Add model</button></div>
+                    </div>
+                    <button id="deleteConnectionButton" class="text-button" type="button">Remove selected connection</button>
+                </div>
             </div>
 
             <div id="dropZone" class="drop-zone">
@@ -62,6 +76,7 @@
                 <p>Extracting text, please wait...</p>
             </div>
 
+            <div class="results-content">
             <div id="resultArea" class="result-area" style="display: none">
                 <div class="image-column">
                     <h2>Original Image</h2>
@@ -98,16 +113,21 @@
             <button id="resetButton" style="display: none">
                 Process Another Image
             </button>
+            </div>
         </div>
 
         <div id="toastNotification" class="toast">
             Text copied to clipboard!
         </div>
 
-        <footer>
-            <p>Powered by Gemini</p>
-        </footer>
-
+        <script>
+            window.DEFAULT_CONNECTION = {
+                name: "Default server",
+                endpoint: {{ default_endpoint|tojson }},
+                model: {{ default_model|tojson }},
+                models: [{{ default_model|tojson }}, "RedHatAI/gemma-4-31B-it-FP8-dynamic"],
+            };
+        </script>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </body>
 </html>
